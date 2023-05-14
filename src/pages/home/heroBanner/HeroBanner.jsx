@@ -28,13 +28,13 @@ const HeroBanner = () => {
     }
 
     return (
-        <div className='heroBanner'>
+        <div className="heroBanner">
 
             {!loading && <div className="backdrop_img">
                 <Img src={background} />
             </div>}
 
-            <div className="opacity-layer"></div>
+            <div className="opacity-layer"> </div>
 
             <ContentWrapper >
 
