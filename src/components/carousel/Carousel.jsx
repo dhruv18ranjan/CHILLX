@@ -12,6 +12,8 @@ import Img from "../lazyLoadImage/Img";
 import PosterFallback from "../../assets/no-poster.png";
 
 import "./style.scss";
+import CircleRating from "../circleRating/CircleRating";
+import Genres from "../genres/Genres";
 
 const Carousel = ({ data, loading }) => {
     const carouselContainer = useRef();
@@ -19,10 +21,16 @@ const Carousel = ({ data, loading }) => {
     const navigate = useNavigate();
 
     const navigation = (dir) => {
+        const container = carouselContainer.current;
 
+        const scrollAmount = dir === "left" ? container.scrollLeft - (container.offsetWidth + 20) : container.scrollLeft + (container.offsetWidth + 20)
+        container.scrollTo({
+            left: scrollAmount,
+            behaviour: "smooth",
+        })
     }
 
-    const skItem=()=>{
+    const skItem = () => {
         <div className="skeletonItem">
             <div className="posterBlock skeleton">
                 <div className="textBlock">
@@ -39,13 +47,19 @@ const Carousel = ({ data, loading }) => {
                 <BsFillArrowLeftCircleFill className="carouselLeftNav arrow" onClick={() => navigation("left")} />
                 <BsFillArrowRightCircleFill className="carouselRightNav arrow" onClick={() => navigation("right")} />
                 {!loading ? (
-                    <div className="carouselItems">
+                    <div className="carouselItems" ref={carouselContainer}>
                         {data?.map((item) => {
                             const posterUrl = item.poster_path ? url.poster + item.poster_path : PosterFallback;
                             return (
-                                <div className="carouselItem" key={item.id} >
+                                
+                                <div className="carouselItem" 
+                                key={item.id} 
+                                onClick={() => navigate(`/${item.media_type}/${item.id}`)} >
+
                                     <div className="posterBlock">
                                         <Img src={posterUrl} />
+                                        <CircleRating rating={item.vote_average.toFixed(1)} />
+                                        <Genres data={item.genre_ids.slice(0, 2)} />
                                     </div>
                                     <div className="textBlock">
                                         <span className="title">
@@ -63,7 +77,11 @@ const Carousel = ({ data, loading }) => {
                     </div>
                 ) : (
                     <div className="loadingSkeleton">
-
+                        {skItem()}
+                        {skItem()}
+                        {skItem()}
+                        {skItem()}
+                        {skItem()}
                     </div>
                 )}
             </ContentWrapper>
