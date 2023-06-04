@@ -15,13 +15,13 @@ import "./style.scss";
 import CircleRating from "../circleRating/CircleRating";
 import Genres from "../genres/Genres";
 
-const Carousel = ({ data, loading }) => {
+const Carousel = ({ data, loading ,endpoint,title}) => {
     const carouselContainer = useRef();
     const { url } = useSelector((state) => state.home)
     const navigate = useNavigate();
 
     const navigation = (dir) => {
-        const container = carouselContainer.current;
+        const container = carouselContainer?.current;
 
         const scrollAmount = dir === "left" ? container.scrollLeft - (container.offsetWidth + 20) : container.scrollLeft + (container.offsetWidth + 20)
         container.scrollTo({
@@ -44,17 +44,26 @@ const Carousel = ({ data, loading }) => {
     return (
         <div className="carousel">
             <ContentWrapper >
+                {title && <div className="carouselTitle">{title}</div>}
                 <BsFillArrowLeftCircleFill className="carouselLeftNav arrow" onClick={() => navigation("left")} />
                 <BsFillArrowRightCircleFill className="carouselRightNav arrow" onClick={() => navigation("right")} />
                 {!loading ? (
                     <div className="carouselItems" ref={carouselContainer}>
                         {data?.map((item) => {
-                            const posterUrl = item.poster_path ? url.poster + item.poster_path : PosterFallback;
+                            const posterUrl = item?.poster_path ? url?.poster + item?.poster_path : PosterFallback;
                             return (
-                                
-                                <div className="carouselItem" 
-                                key={item.id} 
-                                onClick={() => navigate(`/${item.media_type}/${item.id}`)} >
+
+                                <div
+                                key={item.id}
+                                className="carouselItem"
+                                onClick={() =>
+                                    navigate(
+                                        `/${item.media_type||endpoint}/${
+                                            item.id
+                                        }`
+                                    )
+                                }
+                            >
 
                                     <div className="posterBlock">
                                         <Img src={posterUrl} />
