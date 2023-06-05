@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 import ContentWrapper from '../../../components/contentWrapper/ContentWrapper'
-import SwitchTabs from '../switchTabs/switchTabs'
 import useFetch from '../../../hooks/useFetch'
 import Carousel from '../../../components/carousel/Carousel'
+import SwitchTabs from '../switchTabs/switchTabs'
 
 const Popular = () => {
     
